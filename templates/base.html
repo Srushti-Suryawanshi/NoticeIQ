@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}NoticeIQ{% endblock %} · NoticeIQ</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="{{ url_for('static',filename='style.css') }}" rel="stylesheet"></head><body>
+{% if current_user.is_authenticated %}
+<div class="app-shell"><aside class="sidebar" id="sidebar">
+<a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">N</span><span>Notice<span class="brand-accent">IQ</span></span></a>
+<div class="side-label">WORKSPACE</div>
+<a class="nav-link {% if request.endpoint=='dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">▦ <span>Overview</span></a>
+<a class="nav-link {% if request.endpoint in ['notices','notice_detail'] %}active{% endif %}" href="{{ url_for('notices') }}">▤ <span>My notices</span></a>
+<a class="nav-link {% if request.endpoint=='upload' %}active{% endif %}" href="{{ url_for('upload') }}">＋ <span>Upload notice</span></a>
+<a class="nav-link {% if request.endpoint=='tasks_page' %}active{% endif %}" href="{{ url_for('tasks_page') }}">✓ <span>My tasks</span></a>
+<a class="nav-link {% if request.endpoint=='calendar' %}active{% endif %}" href="{{ url_for('calendar') }}">▦ <span>Calendar</span></a>
+<a class="nav-link {% if request.endpoint=='chat' %}active{% endif %}" href="{{ url_for('chat') }}">✦ <span>Ask NoticeIQ</span><span class="new-pill">AI</span></a>
+<div class="side-label side-bottom">PERSONAL</div>
+<a class="nav-link {% if request.endpoint=='notifications' %}active{% endif %}" href="{{ url_for('notifications') }}">♧ <span>Notifications</span>{% if unread_notifications %}<span class="count-pill">{{ unread_notifications }}</span>{% endif %}</a>
+<a class="nav-link {% if request.endpoint=='profile' %}active{% endif %}" href="{{ url_for('profile') }}">⚙ <span>Profile & settings</span></a>
+
+<div class="sidebar-user">
+    <div class="avatar">{{ current_user.name[:1]|upper }}</div>
+    <div class="user-info">
+        <b>{{ current_user.name }}</b>
+        <small>Student workspace</small>
+    </div>
+    <form method="post" action="{{ url_for('logout') }}">
+        <button type="submit" class="logout-btn">
+            <span>↪</span> Logout
+        </button>
+    </form>
+</div>
+</aside><main class="main-area"><header class="topbar"><button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button><div class="topbar-label">Student workspace <span>/</span> {% block crumb %}Overview{% endblock %}</div>
+<button type="button" class="theme-toggle" id="themeToggle">🌙 Dark mode</button>
+<a class="notification-btn" href="{{ url_for('notifications') }}">♧{% if unread_notifications %}<i></i>{% endif %}</a></header>
+{% else %}<nav class="public-nav"><a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">N</span><span>Notice<span class="brand-accent">IQ</span></span></a><div class="public-links"><a href="{{ url_for('home') }}#features">Features</a><a href="{{ url_for('home') }}#how">How it works</a><a href="{{ url_for('home') }}#about">About</a><a class="btn btn-outline-primary btn-sm" href="{{ url_for('login') }}">Log in</a><a class="btn btn-primary btn-sm" href="{{ url_for('register') }}">Get started</a></div></nav>{% endif %}
+<div class="{% if current_user.is_authenticated %}page-content{% else %}public-content{% endif %}">
+{% with messages=get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-wrap">{% for category,message in messages %}<div class="alert alert-{{ 'success' if category=='success' else 'danger' }} alert-dismissible fade show">{{ message }}<button class="btn-close" data-bs-dismiss="alert"></button></div>{% endfor %}</div>{% endif %}{% endwith %}
+{% block content %}{% endblock %}</div>{% if current_user.is_authenticated %}</main></div>{% endif %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="{{ url_for('static',filename='app.js') }}"></script>{% block scripts %}{% endblock %}</body></html>

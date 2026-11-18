@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block title %}Academic calendar{% endblock %}{% block crumb %}Calendar{% endblock %}{% block content %}
+<div class="page-head"><div><div class="eyebrow">YOUR ACADEMIC TIMELINE</div><h1>Academic calendar</h1><p>Dates extracted from your notices and tasks.</p></div></div>
+<section class="panel calendar-panel"><div class="calendar-toolbar"><button class="btn btn-light" id="prevMonth">←</button><h3 id="monthLabel"></h3><button class="btn btn-light" id="nextMonth">→</button><button class="btn btn-outline-primary btn-sm" id="todayBtn">Today</button></div><div class="calendar-weekdays">{% for d in ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] %}<span>{{ d }}</span>{% endfor %}</div><div class="calendar-days" id="calendarDays"></div></section>
+<section class="panel mt-4"><h3>All scheduled dates</h3><div id="eventList" class="event-list"></div></section>
+<script id="calendarData" type="application/json">{{ events|tojson }}</script>{% endblock %}

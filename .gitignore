@@ -1,0 +1,23 @@
+﻿# Virtual environments
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Secrets
+.env
+
+# Database
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploaded files
+uploads/
+
+# Other generated files
+.pytest_cache/
+.DS_Store
